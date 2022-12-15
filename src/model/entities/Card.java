@@ -54,13 +54,13 @@ public class Card {
 
 			throw new ChangeAceValueException("this is not an Ace!");
 
-		} else if (this.rating == Rating.Ace && this.value == 11) {
+		} else if (this.rating == Rating.Ace && this.value == 1) {
 
 			throw new ChangeAceValueException("this ace has already been changed!");
 
 		} else {
 
-			this.value = 11;
+			this.value = 1;
 		}
 	}
 
@@ -69,7 +69,7 @@ public class Card {
 
 		if (this.faceUp == true) {
 
-			return this.rating + " of " + this.rank;
+			return this.rating + " of " + this.rank + String.format(" (%d)", this.value);
 
 		} else {
 
