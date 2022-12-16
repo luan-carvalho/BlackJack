@@ -15,4 +15,9 @@ public class Player {
 
 	}
 
+	public double getMoney() {
+
+		return this.money;
+
+	}
 }

@@ -47,7 +47,10 @@ public class Card {
 		this.faceUp = false;
 
 	}
-
+	
+	//method to change the ace value
+	//it throws an exception if the card is not an ace or if its an ace that has already changed
+	
 	public void changeValue() throws ChangeAceValueException {
 
 		if (this.rating != Rating.Ace) {
@@ -56,7 +59,7 @@ public class Card {
 
 		} else if (this.rating == Rating.Ace && this.value == 1) {
 
-			throw new ChangeAceValueException("this ace has already been changed!");
+			throw new ChangeAceValueException("this ace has already changed its value!");
 
 		} else {
 

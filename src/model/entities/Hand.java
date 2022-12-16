@@ -9,16 +9,31 @@ import model.exceptions.ChangeAceValueException;
 public class Hand {
 
 	private List<Card> cards;
+	private double betAmount;
 
 	public Hand() {
 
 		this.cards = new ArrayList<>();
+		this.betAmount = 0;
 	}
 
 	public List<Card> getCards() {
 
 		return this.cards;
 	}
+
+	public double getBetAmount() {
+
+		return this.betAmount;
+
+	}
+
+	/*
+	 * This method implements the ace value changing logic by iterating through the
+	 * cards in a hand while the hand + new card sums up to 21 and changing all aces
+	 * value to 1 if it hasn't changed yet
+	 * 
+	 */
 
 	public void addCard(Card card) {
 
@@ -30,7 +45,7 @@ public class Hand {
 
 					if (c.getRating() == Rating.Ace && c.getValue() == 11) {
 
-						System.out.println("\n >>>>>>>>> Ace value changed <<<<<<<<<");
+						System.out.println("\n >>>>>>>>> Ace value changed <<<<<<<<<\n");
 						c.changeValue();
 						continue;
 
