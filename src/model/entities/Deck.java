@@ -12,7 +12,7 @@ public class Deck {
 	private List<Card> cards;
 
 	public Deck() {
-		
+
 		this.cards = new ArrayList<>();
 
 		for (Rank rank : Rank.values()) {
@@ -30,6 +30,19 @@ public class Deck {
 	public Card deal() {
 
 		return cards.remove(0);
+
+	}
+
+	public boolean isEmpty() {
+
+		if (this.cards.size() == 0) {
+
+			return true;
+
+		} else {
+
+			return false;
+		}
 
 	}
 
