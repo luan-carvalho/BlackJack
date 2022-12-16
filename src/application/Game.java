@@ -20,6 +20,8 @@ public class Game {
 		hand.addCard(new Card(Rank.Spades, Rating.Ace));
 		hand.addCard(new Card(Rank.Spades, Rating.Two));
 		hand.addCard(new Card(Rank.Spades, Rating.Three));
+		
+		System.out.println(hand);
 
 		while (true) {
 
@@ -55,6 +57,7 @@ public class Game {
 //
 //			System.out.println(e.getMessage());
 //		}
+
 
 	}
 

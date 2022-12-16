@@ -22,14 +22,15 @@ public class Hand {
 
 	public void addCard(Card card) {
 
-		while (this.totalValue() > 21) {
+		while (this.totalValue() + card.getValue() > 21) {
 
 			try {
 
-				for (Card c : cards) {
+				for (Card c : this.cards) {
 
-					if (c.getRating() == Rating.Ace && c.getValue() != 11) {
+					if (c.getRating() == Rating.Ace && c.getValue() == 11) {
 
+						System.out.println("\n >>>>>>>>> Ace value changed <<<<<<<<<");
 						c.changeValue();
 						continue;
 
