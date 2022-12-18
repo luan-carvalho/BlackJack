@@ -2,7 +2,7 @@ package model.entities;
 
 import model.enums.Rank;
 import model.enums.Rating;
-import model.exceptions.ChangeAceValueException;
+import model.exceptions.GeneralException;
 
 public class Card {
 
@@ -47,19 +47,20 @@ public class Card {
 		this.faceUp = false;
 
 	}
-	
-	//method to change the ace value
-	//it throws an exception if the card is not an ace or if its an ace that has already changed
-	
-	public void changeValue() throws ChangeAceValueException {
+
+	// method to change the ace value
+	// it throws an exception if the card is not an ace or if its an ace that has
+	// already changed
+
+	public void changeValue() throws GeneralException {
 
 		if (this.rating != Rating.Ace) {
 
-			throw new ChangeAceValueException("this is not an Ace!");
+			throw new GeneralException("this is not an Ace!");
 
 		} else if (this.rating == Rating.Ace && this.value == 1) {
 
-			throw new ChangeAceValueException("this ace has already changed its value!");
+			throw new GeneralException("this ace has already changed its value!");
 
 		} else {
 
@@ -77,6 +78,19 @@ public class Card {
 		} else {
 
 			return "This card is face-down";
+		}
+
+	}
+
+	public boolean compareTo(Card other) {
+
+		if (this.rating == other.rating) {
+
+			return true;
+
+		} else {
+
+			return false;
 		}
 
 	}

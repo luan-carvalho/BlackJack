@@ -4,17 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import model.enums.Rating;
-import model.exceptions.ChangeAceValueException;
+import model.exceptions.GeneralException;
 
 public class Hand {
 
 	private List<Card> cards;
-	private double betAmount;
+	private double bet;
 
 	public Hand() {
 
 		this.cards = new ArrayList<>();
-		this.betAmount = 0;
+		this.bet = 0;
 	}
 
 	public List<Card> getCards() {
@@ -22,9 +22,34 @@ public class Hand {
 		return this.cards;
 	}
 
+	public Card get(int cardIndex) {
+
+		if (cardIndex < 0) {
+
+			return this.cards.get(this.cards.size() + cardIndex);
+
+		} else {
+
+			return this.cards.get(cardIndex);
+
+		}
+	}
+
 	public double getBetAmount() {
 
-		return this.betAmount;
+		return this.bet;
+
+	}
+
+	public void setBet(double amount) {
+
+		this.bet += amount;
+
+	}
+
+	public void doubleDown() {
+
+		this.bet = this.bet * 2;
 
 	}
 
@@ -55,7 +80,7 @@ public class Hand {
 
 				break;
 
-			} catch (ChangeAceValueException e) {
+			} catch (GeneralException e) {
 
 				System.out.println("Hey, bro, " + e.getMessage());
 			}
@@ -63,6 +88,24 @@ public class Hand {
 		}
 
 		this.cards.add(card);
+	}
+
+	public void removeCard(Card card) {
+
+		this.cards.remove(card);
+	}
+
+	public Card removeCard(int index) {
+
+		if (index < 0) {
+
+			return this.cards.remove(this.cards.size() + index);
+
+		} else {
+
+			return this.cards.remove(index - 1);
+
+		}
 	}
 
 	public int totalValue() {
