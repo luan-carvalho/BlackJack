@@ -6,15 +6,13 @@ import java.util.List;
 import model.enums.Rating;
 import model.exceptions.GeneralException;
 
-public class Hand {
+public abstract class Hand {
 
-	private List<Card> cards;
-	private double bet;
+	protected List<Card> cards;
 
 	public Hand() {
 
 		this.cards = new ArrayList<>();
-		this.bet = 0;
 	}
 
 	public List<Card> getCards() {
@@ -33,24 +31,6 @@ public class Hand {
 			return this.cards.get(cardIndex);
 
 		}
-	}
-
-	public double getBetAmount() {
-
-		return this.bet;
-
-	}
-
-	public void setBet(double amount) {
-
-		this.bet += amount;
-
-	}
-
-	public void doubleDown() {
-
-		this.bet = this.bet * 2;
-
 	}
 
 	/*
@@ -121,28 +101,6 @@ public class Hand {
 	}
 
 	@Override
-	public String toString() {
-
-		StringBuilder sb = new StringBuilder();
-
-		sb.append("[");
-
-		for (int i = 0; i < cards.size(); i++) {
-
-			if (i == 0) {
-
-				sb.append(cards.get(i));
-
-			} else {
-
-				sb.append(", " + cards.get(i));
-			}
-
-		}
-
-		sb.append("]" + String.format(" (%d)", this.totalValue()));
-
-		return sb.toString();
-	}
+	public abstract String toString();
 
 }

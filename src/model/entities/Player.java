@@ -7,13 +7,14 @@ import model.exceptions.GeneralException;
 
 public class Player {
 
-	private List<Hand> hands;
+	private List<PlayerHand> hands;
 	private double money;
 	private int splittedHands;
 
 	public Player() {
 
 		this.hands = new ArrayList<>();
+		this.hands.add(new PlayerHand());
 		this.money = 1000.00;
 		this.splittedHands = 0;
 
@@ -25,19 +26,19 @@ public class Player {
 
 	}
 
-	public Hand getHand() {
+	public PlayerHand getHand() {
 
 		return this.hands.get(0);
 
 	}
 
-	public Hand getHand(int handIndex) {
+	public PlayerHand getHand(int handIndex) {
 
 		return this.hands.get(handIndex - 1);
 
 	}
 
-	public List<Hand> getHands() {
+	public List<PlayerHand> getHands() {
 
 		return this.hands;
 
@@ -57,7 +58,7 @@ public class Player {
 		}
 	}
 
-	public void hint(Card card) {
+	public void hit(Card card) {
 
 		this.hands.get(0).addCard(card);
 
@@ -69,64 +70,70 @@ public class Player {
 
 	}
 
-	public void doubleDown(Card card, int handIndex) {
+	public void doubleDown(int handIndex, Card card) throws GeneralException {
 
-		try {
+		if (this.money < this.hands.get(handIndex - 1).getBetAmount()) {
 
-			if (this.money < this.hands.get(handIndex - 1).getBetAmount()) {
+			throw new GeneralException("you don't have enough money for a double-down");
 
-				throw new GeneralException("you don't have enough money for a split");
+		} else {
 
-			} else {
-
-				this.money -= this.hands.get(handIndex - 1).getBetAmount();
-				this.hands.get(handIndex - 1).doubleDown();
-
-			}
-
-		} catch (GeneralException e) {
-
-			System.out.println("Hey, bro, " + e.getMessage());
+			this.money -= this.hands.get(handIndex - 1).getBetAmount();
+			this.hands.get(handIndex - 1).doubleDown();
+			this.hands.get(handIndex - 1).addCard(card);
 
 		}
 
 	}
 
-	public void splitHand(int handIndex) {
+	public void splitHand(int handIndex) throws GeneralException {
 
-		try {
+		if (!this.hands.get(handIndex - 1).get(-1).compareTo(this.hands.get(handIndex - 1).get(-2))) {
 
-			if (this.hands.get(handIndex - 1).get(-1).compareTo(this.hands.get(handIndex - 1).get(-2))) {
+			throw new GeneralException("you can't split because your two last cards aren't equal");
 
-				throw new GeneralException("you can't split because you don't have two equal cards");
+		} else if (this.money < this.hands.get(handIndex - 1).getBetAmount()) {
 
-			} else if (this.money < this.hands.get(handIndex - 1).getBetAmount()) {
+			throw new GeneralException("you don't have enough money for a split");
 
-				throw new GeneralException("you don't have enough money for a split");
+		} else if (this.splittedHands >= 4) {
 
-			} else if (this.splittedHands >= 4) {
+			throw new GeneralException("you can't split because you have the maximum of splitted hands");
 
-				throw new GeneralException("you can't split because you have the maximum of splitted hands");
+		} else if (handIndex > 4) {
 
-			} else if (handIndex > 4) {
+			throw new GeneralException("enter a number < 4");
+		}
 
-				throw new GeneralException("enter a number < 4");
-			}
+		else {
 
-			else {
-
-				this.hands.add(new Hand());
-				this.hands.get(handIndex).addCard(this.hands.get(0).removeCard(-1));
-				this.splittedHands += 1;
-				this.hands.get(handIndex).setBet(this.hands.get(handIndex - 1).getBetAmount());
-
-			}
-
-		} catch (GeneralException e) {
-
-			System.out.println("Hey, bro, " + e.getMessage());
+			this.hands.add(new PlayerHand());
+			this.hands.get(handIndex).addCard(this.hands.get(0).removeCard(-1));
+			this.splittedHands += 1;
+			this.hands.get(handIndex).setBet(this.hands.get(handIndex - 1).getBetAmount());
+			this.money -= this.hands.get(handIndex - 1).getBetAmount();
 
 		}
+	}
+
+	public String toString() {
+
+		StringBuilder sb = new StringBuilder();
+
+		int handCounter = 1;
+
+		
+
+		for (Hand h : this.hands) {
+
+			sb.append("Hand #" + handCounter + " :" + h + "\n");
+			handCounter++;
+
+		}
+		
+		sb.append("Your actual money: " + String.format("$%.2f", this.money));
+
+		return sb.toString();
 	}
 
 }
