@@ -9,14 +9,12 @@ public class Player {
 
 	private List<PlayerHand> hands;
 	private double money;
-	private int splittedHands;
 
 	public Player() {
 
 		this.hands = new ArrayList<>();
 		this.hands.add(new PlayerHand());
 		this.money = 1000.00;
-		this.splittedHands = 0;
 
 	}
 
@@ -24,6 +22,11 @@ public class Player {
 
 		return this.money;
 
+	}
+
+	public void payment(double amount) {
+
+		this.money += amount;
 	}
 
 	public PlayerHand getHand() {
@@ -96,7 +99,7 @@ public class Player {
 
 			throw new GeneralException("you don't have enough money for a split");
 
-		} else if (this.splittedHands >= 4) {
+		} else if (this.hands.size() >= 4) {
 
 			throw new GeneralException("you can't split because you have the maximum of splitted hands");
 
@@ -109,20 +112,16 @@ public class Player {
 
 			this.hands.add(new PlayerHand());
 			this.hands.get(handIndex).addCard(this.hands.get(0).removeCard(-1));
-			this.splittedHands += 1;
 			this.hands.get(handIndex).setBet(this.hands.get(handIndex - 1).getBetAmount());
 			this.money -= this.hands.get(handIndex - 1).getBetAmount();
 
 		}
 	}
-
 	public String toString() {
 
 		StringBuilder sb = new StringBuilder();
 
 		int handCounter = 1;
-
-		
 
 		for (Hand h : this.hands) {
 
@@ -130,8 +129,26 @@ public class Player {
 			handCounter++;
 
 		}
-		
-		sb.append("Your actual money: " + String.format("$%.2f", this.money));
+
+		sb.append("Your current money: " + String.format("$%.2f", this.money));
+
+		return sb.toString();
+	}
+
+	public String printMoney() {
+
+		StringBuilder sb = new StringBuilder();
+
+		int handCounter = 1;
+
+		for (PlayerHand h : this.hands) {
+
+			sb.append("Hand #:" + handCounter + " bet:" + h.getBetAmount() + "\n");
+			handCounter++;
+
+		}
+
+		sb.append("Your current money: " + String.format("$%.2f", this.money));
 
 		return sb.toString();
 	}

@@ -62,7 +62,7 @@ public abstract class Hand {
 
 			} catch (GeneralException e) {
 
-				System.out.println("Hey, bro, " + e.getMessage());
+				System.out.println("\nHey, bro, " + e.getMessage());
 			}
 
 		}

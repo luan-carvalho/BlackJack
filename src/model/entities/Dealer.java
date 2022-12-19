@@ -3,7 +3,7 @@ package model.entities;
 public class Dealer {
 
 	private Deck deck;
-	private Hand hand;
+	private DealerHand hand;
 
 	public Dealer() {
 
@@ -11,7 +11,7 @@ public class Dealer {
 		this.hand = new DealerHand();
 	}
 
-	public Hand getHand() {
+	public DealerHand getHand() {
 
 		return this.hand;
 	}
