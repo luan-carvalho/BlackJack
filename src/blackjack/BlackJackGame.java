@@ -3,8 +3,12 @@ package blackjack;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+import model.entities.Card;
 import model.entities.Dealer;
 import model.entities.Player;
+import model.entities.PlayerHand;
+import model.enums.Rank;
+import model.enums.Rating;
 import model.exceptions.GeneralException;
 
 public class BlackJackGame {
@@ -15,13 +19,13 @@ public class BlackJackGame {
 	private Dealer dealer;
 	private Scanner sc = new Scanner(System.in);
 
-	private boolean blackJack;
+	private boolean gameOver;
 
 	public BlackJackGame() {
 
 		player = new Player();
 		dealer = new Dealer();
-		this.blackJack = false;
+		this.gameOver = false;
 
 	}
 
@@ -74,10 +78,10 @@ public class BlackJackGame {
 			System.out.println("\n*************************************************");
 			System.out.println("\nThe dealer is dealing your cards...");
 			Thread.sleep(1000);
-			player.getHand().addCard(dealer.deal());
-			player.getHand().addCard(dealer.deal());
-//			player.getHand().addCard(new Card(Rank.Spades, Rating.Ten));
-//			player.getHand().addCard(new Card(Rank.Spades, Rating.Ace));
+//			player.getHand().addCard(dealer.deal());
+//			player.getHand().addCard(dealer.deal());
+			player.getHand().addCard(new Card(Rank.Spades, Rating.Ten));
+			player.getHand().addCard(new Card(Rank.Hearts, Rating.Ten));
 			System.out.println("\nYour cards: " + player.getHand());
 			Thread.sleep(2000);
 
@@ -90,7 +94,7 @@ public class BlackJackGame {
 
 	public void dealingDealerCards() {
 
-		if (!this.blackJack == true) {
+		if (!this.gameOver == true) {
 
 			try {
 
@@ -116,7 +120,7 @@ public class BlackJackGame {
 			System.out.println("\n>>>>>>>>>>>>>>>>>>>> BLACKJACK <<<<<<<<<<<<<<<<<<<");
 			player.payment(player.getHand().getBetAmount() * 3);
 			System.out.println("\nYour current money: " + String.format("$%.2f", player.getMoney()));
-			this.blackJack = true;
+			this.gameOver = true;
 
 		}
 
@@ -124,58 +128,195 @@ public class BlackJackGame {
 
 	public void playerMove() {
 
-		if (!this.blackJack == true) {
+		if (!this.gameOver == true) {
+
+			int currentHand = 1;
 
 			while (true) {
 
 				try {
 
-					int currentHand = 1;
-
 					System.out.println("\n*************************************************");
+					Thread.sleep(1000);
 					System.out.println("\nMoves:\n\n1 - Hit\n2 - Stand\n3 - Double-down\n4 - Split");
+
 					System.out.printf("\n\nYour move for hand #%d: ", currentHand);
 					int move = sc.nextInt();
 
 					if (move < 1 || move > 4) {
 
-						throw new InputMismatchException("Enter a valid answer!!");
+						throw new InputMismatchException("enter a valid answer!!");
 
 					}
+
 					if (move == 1) {
 
-//						player.getHand(currentHand).addCard(dealer.deal());
-//						System.out.println(player.getHand());
-//
-//						if (player.getHand().totalValue() > 21) {
-//
-//							System.out.println("\n>>>>>>>>>>>>>>>>>>>>>>> YOU BUSTED <<<<<<<<<<<<<<<<<<<<<");
-//							System.out.println();
-//						}
+						player.getHand(currentHand).addCard(dealer.deal());
+						System.out.println("\n" + player);
 
-						break;
+						if (player.getHand(currentHand).totalValue() > 21) {
+
+							System.out.printf("\nHAND #%d BUSTED\n", currentHand);
+							player.getHand(currentHand).bust();
+
+							if (player.hasSplitted() && currentHand + 1 <= player.getHands().size()) {
+
+								currentHand++;
+								continue;
+
+							} else {
+
+								break;
+
+							}
+
+						} else {
+
+							continue;
+						}
 
 					} else if (move == 2) {
 
 						System.out.println("\nYou standed!");
-						break;
+
+						if (player.hasSplitted() && currentHand + 1 <= player.getHands().size()) {
+
+							System.out.println("\n" + player);
+							currentHand++;
+							continue;
+
+						} else {
+
+							break;
+
+						}
 
 					} else if (move == 3) {
 
-						break;
+						player.doubleDown(currentHand, dealer.deal());
+						System.out.println(player);
+
+						if (player.getHand(currentHand).totalValue() > 21) {
+
+							System.out.printf("\nHAND #%d BUSTED\n", currentHand);
+							player.getHand(currentHand).bust();
+
+							if (player.hasSplitted() && currentHand + 1 <= player.getHands().size()) {
+
+								currentHand++;
+								continue;
+
+							} else {
+
+								break;
+
+							}
+
+						} else {
+
+							continue;
+						}
 
 					} else if (move == 4) {
 
-						break;
+						player.splitHand(currentHand);
+						player.getHand(currentHand).addCard(dealer.deal());
+						System.out.println("\n" + player);
 
 					}
 
 				} catch (InputMismatchException e) {
 
-					System.out.println("\nError: " + e.getMessage());
+					System.out.println("\n>>>>>>>>>>>>> Hey, bro, " + e.getMessage());
+
+				} catch (InterruptedException e) {
+
+					System.out.println("\n>>>>>>>>>>>>> Error: " + e.getMessage());
+
+				} catch (GeneralException e) {
+
+					System.out.println("\n>>>>>>>>>>>>> Hey, bro, " + e.getMessage());
 				}
 
 			}
+		}
+
+	}
+
+	public void revealDealerCard() {
+
+		if (!this.gameOver == true) {
+
+			System.out.println("\n*************************************************");
+			System.out.println("\nThe dealer is revealing his card...");
+			dealer.revealCard();
+
+			if (dealer.getHand().totalValue() == 21) {
+
+				this.gameOver = true;
+
+				int handCounter = 1;
+
+				for (PlayerHand h : player.getHands()) {
+
+					if (h.hasBusted() == false) {
+
+						System.out.printf("Hand #%d payback: $%.2f\n", handCounter,
+								player.getHand(handCounter).getBetAmount() * 2);
+
+					} else if (h.hasBusted() == true) {
+
+						System.out.printf("Hand #%d BUSTED -> You lost your bet ($%.2f)", handCounter,
+								player.getHand(handCounter).getBetAmount());
+
+					}
+
+					handCounter++;
+
+				}
+			}
+
+		}
+	}
+
+	public void result() {
+
+		if (!this.gameOver == true) {
+
+			int handCounter = 1;
+
+			for (PlayerHand h : player.getHands()) {
+
+				if (h.totalValue() > dealer.getHand().totalValue() && h.hasBusted() == false) {
+
+					System.out.printf("Hand #%d WIN -> Payback: $%.2f\n", handCounter,
+							player.getHand(handCounter).getBetAmount() * 2);
+					player.payment(player.getHand(handCounter).getBetAmount() * 2);
+
+				} else if (h.totalValue() == dealer.getHand().totalValue() && h.hasBusted() == false) {
+
+					System.out.printf("Hand #%d PUSH -> Payback: $%.2f\n", handCounter,
+							player.getHand(handCounter).getBetAmount());
+					player.payment(player.getHand(handCounter).getBetAmount());
+
+				} else if (h.totalValue() < dealer.getHand().totalValue() && h.hasBusted() == false) {
+
+					System.out.printf("Hand #%d LOST -> You lost your bet ($%.2f)", handCounter,
+							player.getHand(handCounter).getBetAmount());
+
+				} else if (h.hasBusted() == true) {
+
+					System.out.printf("Hand #%d BUSTED -> You lost your bet ($%.2f)", handCounter,
+							player.getHand(handCounter).getBetAmount());
+
+				}
+
+				handCounter++;
+
+			}
+
+			System.out.printf("\n\nYour current money: $%.2f", player.getMoney());
+
 		}
 
 	}
@@ -198,6 +339,7 @@ public class BlackJackGame {
 
 					dealer.reset();
 					player.reset();
+					this.gameOver = false;
 					return true;
 
 				} else {

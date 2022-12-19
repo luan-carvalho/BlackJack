@@ -47,6 +47,23 @@ public class Dealer {
 
 	public void revealCard() {
 
+		this.hand.get(1).setFaceUp();
+
+		while (this.hand.totalValue() < 17) {
+
+			try {
+
+				this.hand.addCard(deal());
+				Thread.sleep(1000);
+				System.out.println("\n" + this.hand);
+
+			} catch (InterruptedException e) {
+
+				System.out.println("\nError: " + e.getMessage());
+
+			}
+		}
+
 	}
 
 }

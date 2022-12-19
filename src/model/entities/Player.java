@@ -47,6 +47,21 @@ public class Player {
 
 	}
 
+	public boolean hasSplitted() {
+
+		if (this.hands.size() > 1 && this.hands.size() < 4) {
+
+			return true;
+
+		}
+
+		else {
+
+			return false;
+		}
+
+	}
+
 	public void bet(double amount) throws GeneralException {
 
 		if (this.money < amount) {
@@ -130,8 +145,6 @@ public class Player {
 			handCounter++;
 
 		}
-
-		sb.append("Your current money: " + String.format("$%.2f", this.money));
 
 		return sb.toString();
 	}
