@@ -3,12 +3,9 @@ package blackjack;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-import model.entities.Card;
 import model.entities.Dealer;
 import model.entities.Player;
 import model.entities.PlayerHand;
-import model.enums.Rank;
-import model.enums.Rating;
 import model.exceptions.GeneralException;
 
 public class BlackJackGame {
@@ -78,10 +75,8 @@ public class BlackJackGame {
 			System.out.println("\n*************************************************");
 			System.out.println("\nThe dealer is dealing your cards...");
 			Thread.sleep(1000);
-//			player.getHand().addCard(dealer.deal());
-//			player.getHand().addCard(dealer.deal());
-			player.getHand().addCard(new Card(Rank.Spades, Rating.Ten));
-			player.getHand().addCard(new Card(Rank.Hearts, Rating.Ten));
+			player.getHand().addCard(dealer.deal());
+			player.getHand().addCard(dealer.deal());
 			System.out.println("\nYour cards: " + player.getHand());
 			Thread.sleep(2000);
 

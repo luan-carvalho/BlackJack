@@ -12,11 +12,13 @@ public class Game {
 
 		do {
 
-//			game.betPlacing();
+			game.betPlacing();
 			game.dealingPlayerCards();
-//			game.checkBlackJack();
-//			game.dealingDealerCards();
+			game.checkBlackJack();
+			game.dealingDealerCards();
 			game.playerMove();
+			game.revealDealerCard();
+			game.result();
 
 		} while (game.playAgain());
 

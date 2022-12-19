@@ -50,7 +50,7 @@ public abstract class Hand {
 
 					if (c.getRating() == Rating.Ace && c.getValue() == 11) {
 
-						System.out.println("\n >>>>>>>>> Ace value changed <<<<<<<<<\n");
+						System.out.println("\n>>>>>>>>> Ace value changed <<<<<<<<<\n");
 						c.changeValue();
 						continue;
 

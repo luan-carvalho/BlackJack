@@ -48,6 +48,7 @@ public class Dealer {
 	public void revealCard() {
 
 		this.hand.get(1).setFaceUp();
+		System.out.println("\n" + this.hand);
 
 		while (this.hand.totalValue() < 17) {
 
