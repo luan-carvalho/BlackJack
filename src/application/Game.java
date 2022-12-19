@@ -10,10 +10,15 @@ public class Game {
 
 		game.welcomeMessage();
 
-		game.betPlacing();
-		game.dealingCards();
-		game.checkBlackJack();
-		game.playerMove();
+		do {
+
+			game.betPlacing();
+			game.dealingPlayerCards();
+			game.checkBlackJack();
+			game.dealingDealerCards();
+			game.playerMove();
+
+		} while (game.playAgain());
 
 	}
 

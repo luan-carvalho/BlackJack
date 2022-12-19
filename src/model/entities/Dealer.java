@@ -16,16 +16,17 @@ public class Dealer {
 		return this.hand;
 	}
 
-	public void resetDeck() {
+	public void reset() {
 
 		this.deck = new Deck();
+		this.hand = new DealerHand();
 	}
 
 	public Card deal() {
 
 		if (deck.isEmpty()) {
 
-			this.resetDeck();
+			this.deck = new Deck();
 			return deck.deal();
 
 		} else {

@@ -117,6 +117,7 @@ public class Player {
 
 		}
 	}
+
 	public String toString() {
 
 		StringBuilder sb = new StringBuilder();
@@ -135,22 +136,10 @@ public class Player {
 		return sb.toString();
 	}
 
-	public String printMoney() {
+	public void reset() {
 
-		StringBuilder sb = new StringBuilder();
-
-		int handCounter = 1;
-
-		for (PlayerHand h : this.hands) {
-
-			sb.append("Hand #:" + handCounter + " bet:" + h.getBetAmount() + "\n");
-			handCounter++;
-
-		}
-
-		sb.append("Your current money: " + String.format("$%.2f", this.money));
-
-		return sb.toString();
+		this.hands = new ArrayList<>();
+		this.hands.add(new PlayerHand());
 	}
 
 }

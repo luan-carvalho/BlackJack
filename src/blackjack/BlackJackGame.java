@@ -29,13 +29,13 @@ public class BlackJackGame {
 
 		System.out.println("********************* Welcome to the Monkeys Cassino *********************");
 		System.out.println("\nMinimal bet: $" + this.minimalBet);
-		System.out.println("Your start money: $" + this.player.getMoney());
 
 	}
 
 	public void betPlacing() {
 
 		System.out.println("\n*************************************************");
+		System.out.println("\nYour money: $" + this.player.getMoney());
 
 		while (true) {
 
@@ -46,12 +46,13 @@ public class BlackJackGame {
 
 				if (roundBet < this.minimalBet) {
 
-					throw new GeneralException("your bet is lesser than the minimal. Enter a new bet");
+					throw new GeneralException(String
+							.format("your bet is lesser than the minimal ($%.2f). Enter a new bet!", this.minimalBet));
 
 				} else {
 
 					player.bet(roundBet);
-					player.printMoney();
+					System.out.println("\nYour current money: " + String.format("$%.2f", this.player.getMoney()));
 					break;
 
 				}
@@ -66,7 +67,7 @@ public class BlackJackGame {
 
 	}
 
-	public void dealingCards() {
+	public void dealingPlayerCards() {
 
 		try {
 
@@ -75,15 +76,9 @@ public class BlackJackGame {
 			Thread.sleep(1000);
 			player.getHand().addCard(dealer.deal());
 			player.getHand().addCard(dealer.deal());
+//			player.getHand().addCard(new Card(Rank.Spades, Rating.Ten));
+//			player.getHand().addCard(new Card(Rank.Spades, Rating.Ace));
 			System.out.println("\nYour cards: " + player.getHand());
-			
-			Thread.sleep(2000);
-
-			System.out.println("\n*************************************************");
-			System.out.println("\nThe dealer is dealing his cards...");
-			Thread.sleep(1000);
-			dealer.dealDealersCards();
-			System.out.println("\nDealer's cards: " + dealer.getHand());
 			Thread.sleep(2000);
 
 		} catch (InterruptedException e) {
@@ -93,13 +88,34 @@ public class BlackJackGame {
 
 	}
 
+	public void dealingDealerCards() {
+
+		if (!this.blackJack == true) {
+
+			try {
+
+				System.out.println("\n*************************************************");
+				System.out.println("\nThe dealer is dealing his cards...");
+				Thread.sleep(1000);
+				dealer.dealDealersCards();
+				System.out.println("\nDealer's cards: " + dealer.getHand());
+				Thread.sleep(2000);
+
+			} catch (InterruptedException e) {
+
+				System.out.println("Error: " + e.getMessage());
+			}
+		}
+
+	}
+
 	public void checkBlackJack() {
 
-		if (player.getHand().totalValue() > 21) {
+		if (player.getHand().totalValue() == 21) {
 
 			System.out.println("\n>>>>>>>>>>>>>>>>>>>> BLACKJACK <<<<<<<<<<<<<<<<<<<");
 			player.payment(player.getHand().getBetAmount() * 3);
-			System.out.println("\nYour current money: " + String.format("$%f", player.getMoney()));
+			System.out.println("\nYour current money: " + String.format("$%.2f", player.getMoney()));
 			this.blackJack = true;
 
 		}
@@ -142,6 +158,7 @@ public class BlackJackGame {
 					} else if (move == 2) {
 
 						System.out.println("\nYou standed!");
+						break;
 
 					} else if (move == 3) {
 
@@ -158,6 +175,40 @@ public class BlackJackGame {
 					System.out.println("\nError: " + e.getMessage());
 				}
 
+			}
+		}
+
+	}
+
+	public boolean playAgain() {
+
+		while (true) {
+
+			try {
+
+				System.out.print("\nPlay again (y/n)?\n->: ");
+
+				char ask = sc.next().toLowerCase().charAt(0);
+
+				if (ask != 'y' && ask != 'n') {
+
+					throw new InputMismatchException("enter a valid answer!!");
+
+				} else if (ask == 'y') {
+
+					dealer.reset();
+					player.reset();
+					return true;
+
+				} else {
+
+					return false;
+				}
+
+			} catch (InputMismatchException e) {
+
+				System.out.println("\nHey, bro, " + e.getMessage());
+				continue;
 			}
 		}
 
