@@ -18,11 +18,29 @@ public class BlackJackGame {
 
 	private boolean gameOver;
 
-	public BlackJackGame() {
+	public BlackJackGame(Player player, Dealer dealer) {
 
-		player = new Player();
-		dealer = new Dealer();
+		this.player = player;
+		this.dealer = dealer;
 		this.gameOver = false;
+
+	}
+
+	public void start() {
+
+		welcomeMessage();
+
+		do {
+
+			betPlacing();
+			dealingPlayerCards();
+			checkBlackJack();
+			dealingDealerCards();
+			playerMove();
+			revealDealerCard();
+			result();
+
+		} while (playAgain());
 
 	}
 
@@ -173,7 +191,7 @@ public class BlackJackGame {
 								continue;
 
 							} else {
-								
+
 								System.out.println("\n*************************************************");
 								System.out.println("\nYou lost your bet!");
 								System.out.printf("\nYour current money: $%.2f\n", player.getMoney());
@@ -360,7 +378,7 @@ public class BlackJackGame {
 		while (true) {
 
 			try {
-				
+
 				System.out.println("\n*************************************************");
 				System.out.print("\nPlay again (y/n)?\n->: ");
 
