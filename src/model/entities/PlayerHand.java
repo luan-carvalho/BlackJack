@@ -1,5 +1,7 @@
 package model.entities;
 
+import java.util.Arrays;
+
 public class PlayerHand extends Hand {
 
 	private double bet;
@@ -47,22 +49,9 @@ public class PlayerHand extends Hand {
 
 		StringBuilder sb = new StringBuilder();
 
-		sb.append("[");
+		sb.append(Arrays.toString(this.cards.toArray()));
 
-		for (int i = 0; i < cards.size(); i++) {
-
-			if (i == 0) {
-
-				sb.append(cards.get(i));
-
-			} else {
-
-				sb.append(", " + cards.get(i));
-			}
-
-		}
-
-		sb.append("]" + String.format(" (%d)", this.totalValue()) + String.format(" ($%.2f)", this.bet));
+		sb.append(String.format(" (%d)", this.totalValue()) + String.format(" ($%.2f)", this.bet));
 
 		return sb.toString();
 

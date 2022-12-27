@@ -1,5 +1,8 @@
 package model.entities;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 public class DealerHand extends Hand {
 
 	public DealerHand() {
@@ -12,26 +15,9 @@ public class DealerHand extends Hand {
 
 		StringBuilder sb = new StringBuilder();
 
-		sb.append("[");
+		sb.append(Arrays.toString(this.cards.toArray()));
 
-		for (int i = 0; i < cards.size(); i++) {
-
-			if (i == 0) {
-
-				sb.append(cards.get(i));
-
-			} else {
-
-				sb.append(", " + cards.get(i));
-			}
-
-		}
-
-		if (this.cards.stream().filter(c -> c.isFaceUp() == false).toList().size() > 0) {
-
-			sb.append("]");
-
-		} else {
+		if (!(this.cards.stream().filter(c -> c.isFaceUp() == false).collect(Collectors.toList()).size() > 0)) {
 
 			sb.append("]" + String.format(" (%d)", totalValue()));
 
